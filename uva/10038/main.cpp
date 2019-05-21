@@ -19,7 +19,7 @@ bool is_sequence_a_jolly_jumper(int *sequence, unsigned int n)
 {
     if (n == 1)
         return true;
-    
+
     set<int> differences;
 
     for (int i = 0; i < n - 1; i++)
