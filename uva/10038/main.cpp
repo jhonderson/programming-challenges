@@ -1,13 +1,12 @@
 
 #include <iostream>
-#include <set>
 #include <math.h>
 
 /**
  * UVA 10038: Jully Jumpers
  *
  * Time complexity:
- *   O(n log n)
+ *   O(n)
  *
  * Space complexity:
  *   O(n)
@@ -20,16 +19,20 @@ bool is_sequence_a_jolly_jumper(int *sequence, unsigned int n)
     if (n == 1)
         return true;
 
-    set<int> differences;
+    bool differences_found[n - 1];
+    for (int i = 0; i < n - 1; i++)
+    {
+        differences_found[i] = false;
+    }
 
     for (int i = 0; i < n - 1; i++)
     {
         int difference = abs(sequence[i] - sequence[i + 1]);
-        if (1 <= difference && difference <= n - 1) {
-            // complexity generally: log n
-            differences.insert(difference);
-        }
-        if (differences.size() != (i +  1)) {
+        if (1 <= difference && difference <= n - 1 && !differences_found[difference - 1])
+        {
+            differences_found[difference - 1] = true;
+        } else
+        {
             return false;
         }
     }
