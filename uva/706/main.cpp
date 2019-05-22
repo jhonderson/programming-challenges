@@ -10,7 +10,7 @@
  *   <# digits> * (2 * <size> + 3)
  *
  * Space complexity:
- *   <# digits> * (2 * <size> + 3) * (<size> + 2) 
+ *   <# digits> * (2 * <size> + 3) * (<size> + 2)
  * */
 
 using namespace std;
