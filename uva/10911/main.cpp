@@ -20,7 +20,7 @@ double find_distance(int* x, int* y, unsigned int i, unsigned int j)
     return sqrt((x[j]-x[i]) * (x[j]-x[i]) + (y[j]-y[i]) * (y[j]-y[i]));
 }
 
-double find_minimum_distance_sum_recursivelly(int* x, int* y, unsigned int n, bool* visited_points)
+double find_minimum_distance_sum_recursivelly(int* x, int* y, unsigned int n, bool* visited_points, unsigned int accum_distance)
 {
     double answer = MAX_ANSWER;
     for (int i = 0; i < n; i++)
@@ -33,8 +33,8 @@ double find_minimum_distance_sum_recursivelly(int* x, int* y, unsigned int n, bo
             visited_points[j] = true;
 
             double points_distance = find_distance(x, y, i, j);
-            if (points_distance < answer) {
-                double current_answer = points_distance + find_minimum_distance_sum_recursivelly(x, y, n, visited_points);
+            if (accum_distance + points_distance  < answer) {
+                double current_answer = points_distance + find_minimum_distance_sum_recursivelly(x, y, n, visited_points, accum_distance + points_distance);
                 answer = min(answer, current_answer);
             }
 
@@ -50,7 +50,7 @@ double find_minimum_distance_sum(int* x, int* y, unsigned int n)
     bool visited_points[n];
     for (int i = 0; i < n; i++)
         visited_points[i] = false;
-    return find_minimum_distance_sum_recursivelly(x, y, n, visited_points);
+    return find_minimum_distance_sum_recursivelly(x, y, n, visited_points, 0);
 }
 
 int main()
