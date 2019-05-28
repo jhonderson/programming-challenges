@@ -22,19 +22,11 @@ void initDate(date_tuple_t &dateTuple, unsigned int year, unsigned int month, un
     dateTuple.date = date;
 }
 
-bool comparatorByDate(date_tuple_t date1, date_tuple_t date2)
+bool dateComparator(date_tuple_t date1, date_tuple_t date2)
 {
-    return date1.month == date2.month && date1.date < date2.date;
-}
-
-bool comparatorByMonth(date_tuple_t date1, date_tuple_t date2)
-{
-    return date1.month < date2.month;
-}
-
-bool comparatorByAge(date_tuple_t date1, date_tuple_t date2)
-{
-    return date1.month == date2.month && date1.date == date2.date && date1.year >  date2.year;
+    return date1.month < date2.month
+        || ((date1.month <= date2.month) && date1.date < date2.date)
+        || (((date1.month <= date2.month) && date1.date <= date2.date) && date1.year >  date2.year);
 }
 
 void printDates(vector<date_tuple_t> dates)
@@ -48,9 +40,8 @@ vector<date_tuple_t> sortDates(date_tuple_t* dates, unsigned int n)
 {
     vector<date_tuple_t> data(dates, dates + n);
 
-    sort(data.begin(), data.end(), comparatorByMonth);
-    sort(data.begin(), data.end(), comparatorByDate);
-    sort(data.begin(), data.end(), comparatorByAge);
+    sort(data.begin(), data.end(), dateComparator);
+
     return data;
 }
 
@@ -60,11 +51,13 @@ void bookCode()
     iii B = make_pair(ii(5, 22), -1980);
     iii C = make_pair(ii(11, 13), -1983);
     iii D = make_pair(ii(5, 22), -1981);
+    iii E = make_pair(ii(5, 21), -1982);
     vector<iii> birthdays;
     birthdays.push_back(A);
     birthdays.push_back(B);
     birthdays.push_back(C);
     birthdays.push_back(D);
+    birthdays.push_back(E);
     sort(birthdays.begin(), birthdays.end());
     for (int i = 0; i < birthdays.size(); i++)
         printf("(%d,%d,%d)\n", birthdays[i].first.first, birthdays[i].first.second, birthdays[i].second);
