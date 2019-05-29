@@ -10,8 +10,10 @@
  * UVA 10911: Forming quiz teams
  *
  * Time complexity:
+ *  C(16,2) * C(14,2) * ... * C(2,2)
  *
  * Space complexity:
+ *  N
  * */
 
 using namespace std;
