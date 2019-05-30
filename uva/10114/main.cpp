@@ -14,23 +14,29 @@
 using namespace std;
 
 unsigned short int findFirstMonthDebtIsLessThanCarPrice(unsigned short int months,
-    double downPayment, double loanAmount, unsigned short int* deprecationMonts,
+    double downPayment, double loanAmount, unsigned short int* deprecationMonths,
     double* deprecationPercentages, unsigned short int numOfDeprecationRecords)
 {
-    double montlyPayment = loanAmount / (double) months;
-    double lastLoanAmount = loanAmount + montlyPayment;
+    double monthlyPayment = loanAmount / (double) months;
+
+    // trick to treat month 0 like the others months, i.e the loan
+    // amount is the before loan amount less the monthly payment, which
+    // in the case of month 0 is the original loan amount:
+    //   (loanAmount + monthlyPayment) - monthlyPayment = loanAmount
+    double lastLoanAmount = loanAmount + monthlyPayment;
+
     double lastCarValue = loanAmount + downPayment;
     double lastDeprecationPercentage;
     unsigned short int deprecationIndex = 0;
 
     for (unsigned short int month = 0; month < months; month++)
     {
-        if (deprecationIndex < numOfDeprecationRecords && month == deprecationMonts[deprecationIndex])
+        if (deprecationIndex < numOfDeprecationRecords && month == deprecationMonths[deprecationIndex])
         {
             lastDeprecationPercentage = deprecationPercentages[deprecationIndex];
             deprecationIndex++;
         }
-        lastLoanAmount -= montlyPayment;
+        lastLoanAmount -= monthlyPayment;
         lastCarValue = lastCarValue - lastCarValue * lastDeprecationPercentage;
         if (lastLoanAmount < lastCarValue)
             return month;
@@ -51,15 +57,15 @@ int main()
     double downPayment, loanAmount;
     while (cin >> months >> downPayment >> loanAmount >> numOfDeprecationRecords, months >= 0)
     {
-        unsigned short int deprecationMonts[numOfDeprecationRecords];
+        unsigned short int deprecationMonths[numOfDeprecationRecords];
         double deprecationPercentages[numOfDeprecationRecords];
         deprecationIndex = -1;
         while(++deprecationIndex < numOfDeprecationRecords)
         {
-            cin >> deprecationMonts[deprecationIndex] >> deprecationPercentages[deprecationIndex];
+            cin >> deprecationMonths[deprecationIndex] >> deprecationPercentages[deprecationIndex];
         }
         monthAnswer = findFirstMonthDebtIsLessThanCarPrice(months,
-            downPayment, loanAmount, deprecationMonts,
+            downPayment, loanAmount, deprecationMonths,
             deprecationPercentages, numOfDeprecationRecords);
         printFormattedMonth(monthAnswer);
     }
