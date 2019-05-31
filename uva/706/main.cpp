@@ -1,7 +1,7 @@
+
 #include <iostream>
 #include <math.h>
 #include <vector>
-
 
 /**
  * UVA 706: LCD Display
@@ -15,76 +15,32 @@
 
 using namespace std;
 
-struct lcd_digit_side_flags_t {
-    bool top;
-    bool middle;
-    bool bottom;
-    bool up_left;
-    bool up_right;
-    bool bottom_left;
-    bool bottom_right;
-} zero, one, two, three, four, five, six, seven, eight, nine;
+char topEnabled = 1 << 0;
+char middleEnabled = 1 << 1;
+char bottomEnabled = 1 << 2;
+char upLeftEnabled = 1 << 3;
+char upRightEnabled = 1 << 4;
+char bottomLeftpEnabled = 1 << 5;
+char bottomRightEnabled = 1 << 6;
+
+char numbersAsBitMasks[10];
 
 void initialize_digits_flags()
 {
-    zero.top = true;
-    zero.bottom = true;
-    zero.up_left = true;
-    zero.up_right = true;
-    zero.bottom_left = true;
-    zero.bottom_right = true;
+    numbersAsBitMasks[8] = topEnabled | middleEnabled | bottomEnabled | upLeftEnabled | upRightEnabled | bottomLeftpEnabled | bottomRightEnabled;
+    numbersAsBitMasks[1] = upRightEnabled | bottomRightEnabled;
 
-    one.up_right = true;
-    one.bottom_right = true;
+    numbersAsBitMasks[0] = numbersAsBitMasks[8] & ~middleEnabled;
+    numbersAsBitMasks[6] = numbersAsBitMasks[8] & ~upRightEnabled;
+    numbersAsBitMasks[9] = numbersAsBitMasks[8] & ~bottomLeftpEnabled;
+    numbersAsBitMasks[2] = numbersAsBitMasks[8] & ~upLeftEnabled & ~bottomRightEnabled;
+    numbersAsBitMasks[3] = numbersAsBitMasks[8] & ~upLeftEnabled & ~bottomLeftpEnabled;
 
-    two.top = true;
-    two.middle = true;
-    two.bottom = true;
-    two.up_right = true;
-    two.bottom_left = true;
+    numbersAsBitMasks[4] = numbersAsBitMasks[9] & ~topEnabled;
 
-    three.top = true;
-    three.middle = true;
-    three.bottom = true;
-    three.up_right = true;
-    three.bottom_right = true;
+    numbersAsBitMasks[5] = numbersAsBitMasks[6] & ~bottomLeftpEnabled;
 
-    four.middle = true;
-    four.up_left = true;
-    four.up_right = true;
-    four.bottom_right = true;
-
-    five.top = true;
-    five.middle = true;
-    five.bottom = true;
-    five.up_left = true;
-    five.bottom_right = true;
-
-    six.top = true;
-    six.middle = true;
-    six.bottom = true;
-    six.up_left = true;
-    six.bottom_left = true;
-    six.bottom_right = true;
-
-    seven.top = true;
-    seven.up_right = true;
-    seven.bottom_right = true;
-
-    eight.top = true;
-    eight.middle = true;
-    eight.bottom = true;
-    eight.up_left = true;
-    eight.up_right = true;
-    eight.bottom_left = true;
-    eight.bottom_right = true;
-
-    nine.top = true;
-    nine.middle = true;
-    nine.bottom = true;
-    nine.up_left = true;
-    nine.up_right = true;
-    nine.bottom_right = true;
+    numbersAsBitMasks[7] = numbersAsBitMasks[1] | topEnabled;
 }
 
 int get_digit_width(unsigned int size)
@@ -123,7 +79,7 @@ void print_lcd_board(vector<vector<char> > &lcd_board, unsigned int size)
     cout << endl;
 }
 
-void put_digit_into_board(vector<vector<char> > &lcd_board, unsigned int size, lcd_digit_side_flags_t lcd_digit_side_flags)
+void put_digit_into_board(vector<vector<char> > &lcd_board, unsigned int size, char lcd_flags)
 {
     int digit_height = get_digit_height(size);
     int digit_width = get_digit_width(size);
@@ -132,28 +88,28 @@ void put_digit_into_board(vector<vector<char> > &lcd_board, unsigned int size, l
 
     for ( int j = 1 ; j < digit_width - 1 ; j++ )
     {
-        if (lcd_digit_side_flags.top) {
+        if (lcd_flags & topEnabled) {
             digit_board[0][j] = '-';
         }
-        if (lcd_digit_side_flags.middle) {
+        if (lcd_flags & middleEnabled) {
             digit_board[(digit_height - 1) / 2][j] = '-';
         }
-        if (lcd_digit_side_flags.bottom) {
+        if (lcd_flags & bottomEnabled) {
             digit_board[digit_height - 1][j] = '-';
         }
     }
     for ( int i = 1 ; i < (digit_height - 1) / 2 ; i++ )
     {
-        if (lcd_digit_side_flags.up_left) {
+        if (lcd_flags & upLeftEnabled) {
             digit_board[i][0] = '|';
         }
-        if (lcd_digit_side_flags.up_right) {
+        if (lcd_flags & upRightEnabled) {
             digit_board[i][digit_width - 1] = '|';
         }
-        if (lcd_digit_side_flags.bottom_left) {
+        if (lcd_flags & bottomLeftpEnabled) {
             digit_board[digit_height - i - 1][0] = '|';
         }
-        if (lcd_digit_side_flags.bottom_right) {
+        if (lcd_flags & bottomRightEnabled) {
             digit_board[digit_height - i - 1][digit_width - 1] = '|';
         }
     }
@@ -167,38 +123,7 @@ void put_digits_into_board(vector<vector<char> > &lcd_board, unsigned long numbe
     }
 
     unsigned int digit = number % 10;
-    switch(digit) {
-        case 0:
-            put_digit_into_board(lcd_board, size, zero);
-            break;
-        case 1:
-            put_digit_into_board(lcd_board, size, one);
-            break;
-        case 2:
-            put_digit_into_board(lcd_board, size, two);
-            break;
-        case 3:
-            put_digit_into_board(lcd_board, size, three);
-            break;
-        case 4:
-            put_digit_into_board(lcd_board, size, four);
-            break;
-        case 5:
-            put_digit_into_board(lcd_board, size, five);
-            break;
-        case 6:
-            put_digit_into_board(lcd_board, size, six);
-            break;
-        case 7:
-            put_digit_into_board(lcd_board, size, seven);
-            break;
-        case 8:
-            put_digit_into_board(lcd_board, size, eight);
-            break;
-        case 9:
-            put_digit_into_board(lcd_board, size, nine);
-            break;
-    }
+    put_digit_into_board(lcd_board, size, numbersAsBitMasks[digit]);
 
     // tail recursion
     put_digits_into_board(lcd_board, number / 10, size);
