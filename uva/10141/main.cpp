@@ -28,10 +28,10 @@
  * UVa 10141 - Request for Proposal
  *
  * Time complexity:
- *  n log(n), where n is the number of proposals.
+ *  O(n), where n is the number of proposals.
  *
  * Space complexity:
- *  n, where n is the number of proposals.
+ *  O(n), where n is the number of proposals.
  * */
 
 using namespace std;
