@@ -41,7 +41,7 @@ string findDirectionOfLastSegmentAfterMovements(unsigned int L, const string* st
 {
     char axisOfLS = 'x';
     bool signOfAxisOfLS = true;
-    string dirOfLastSegment = "+x", currentStep;
+    string currentStep;
     for (int i = 1; i <= L - 1; i++)
     {
         currentStep = steps[i];
