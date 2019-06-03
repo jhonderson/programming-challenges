@@ -23,7 +23,6 @@
 
 #include <algorithm>
 #include <iostream>
-#include <vector>
 
 /**
  * UVa 10141 - Request for Proposal
@@ -37,39 +36,52 @@
 
 using namespace std;
 
-typedef pair<short int, double> proposal_sort_fields_t;
-typedef pair<proposal_sort_fields_t, string > proposal_t;
-
 int main(int argc, char **argv)
 {
     short int numOfRequirements, numOfProposals, numOfMetReqs, refId = 1;
     char reqName[81], propName[81];
     double propPrice;
+    short int maxMetReq;
+    double minPrice;
+    string nameOfWinProporsal;
     while (cin >> numOfRequirements >> numOfProposals, numOfRequirements != 0 && numOfProposals != 0)
     {
+        maxMetReq = -1;
+        minPrice = 999999999999999;
+        nameOfWinProporsal = "";
+
+        // Leave a blank line between the output for each pair of RFPs
         if (refId > 1)
             cout << endl;
+
         cin.ignore();
+
         for (int i = 0; i < numOfRequirements; i++)
             cin.getline(reqName, sizeof(reqName));
 
-        vector<proposal_t> proposals(numOfProposals);
         for (int i = 0; i < numOfProposals; i++)
         {
             cin.getline(propName, sizeof(propName));
             cin >> propPrice >> numOfMetReqs;
             cin.ignore();
 
-            proposals[i] = make_pair(make_pair(numOfMetReqs*-1, propPrice), string(propName));
+            if (numOfMetReqs > maxMetReq)
+            {
+                minPrice = propPrice;
+                maxMetReq = numOfMetReqs;
+                nameOfWinProporsal = string(propName);
+            } else if (numOfMetReqs == maxMetReq && propPrice < minPrice)
+            {
+                minPrice = propPrice;
+                nameOfWinProporsal = string(propName);
+            }
 
             for (int j = 0; j < numOfMetReqs; j++)
                 cin.getline(reqName, sizeof(reqName));
         }
 
-        sort(proposals.begin(), proposals.end());
-
         printf("RFP #%d\n", refId);
-        printf("%s\n", proposals[0].second.c_str());
+        printf("%s\n", nameOfWinProporsal.c_str());
         refId++;
     }
     return 0;
