@@ -23,24 +23,24 @@ char upRightEnabled = 1 << 4;
 char bottomLeftpEnabled = 1 << 5;
 char bottomRightEnabled = 1 << 6;
 
-char numbersAsBitMasks[10];
+char numbersAsBitFlags[10];
 
 void initialize_digits_flags()
 {
-    numbersAsBitMasks[8] = topEnabled | middleEnabled | bottomEnabled | upLeftEnabled | upRightEnabled | bottomLeftpEnabled | bottomRightEnabled;
-    numbersAsBitMasks[1] = upRightEnabled | bottomRightEnabled;
+    numbersAsBitFlags[8] = topEnabled | middleEnabled | bottomEnabled | upLeftEnabled | upRightEnabled | bottomLeftpEnabled | bottomRightEnabled;
+    numbersAsBitFlags[1] = upRightEnabled | bottomRightEnabled;
 
-    numbersAsBitMasks[0] = numbersAsBitMasks[8] & ~middleEnabled;
-    numbersAsBitMasks[6] = numbersAsBitMasks[8] & ~upRightEnabled;
-    numbersAsBitMasks[9] = numbersAsBitMasks[8] & ~bottomLeftpEnabled;
-    numbersAsBitMasks[2] = numbersAsBitMasks[8] & ~upLeftEnabled & ~bottomRightEnabled;
-    numbersAsBitMasks[3] = numbersAsBitMasks[8] & ~upLeftEnabled & ~bottomLeftpEnabled;
+    numbersAsBitFlags[0] = numbersAsBitFlags[8] & ~middleEnabled;
+    numbersAsBitFlags[6] = numbersAsBitFlags[8] & ~upRightEnabled;
+    numbersAsBitFlags[9] = numbersAsBitFlags[8] & ~bottomLeftpEnabled;
+    numbersAsBitFlags[2] = numbersAsBitFlags[8] & ~upLeftEnabled & ~bottomRightEnabled;
+    numbersAsBitFlags[3] = numbersAsBitFlags[8] & ~upLeftEnabled & ~bottomLeftpEnabled;
 
-    numbersAsBitMasks[4] = numbersAsBitMasks[9] & ~topEnabled;
+    numbersAsBitFlags[4] = numbersAsBitFlags[9] & ~topEnabled;
 
-    numbersAsBitMasks[5] = numbersAsBitMasks[6] & ~bottomLeftpEnabled;
+    numbersAsBitFlags[5] = numbersAsBitFlags[6] & ~bottomLeftpEnabled;
 
-    numbersAsBitMasks[7] = numbersAsBitMasks[1] | topEnabled;
+    numbersAsBitFlags[7] = numbersAsBitFlags[1] | topEnabled;
 }
 
 int get_digit_width(unsigned int size)
@@ -123,7 +123,7 @@ void put_digits_into_board(vector<vector<char> > &lcd_board, unsigned long numbe
     }
 
     unsigned int digit = number % 10;
-    put_digit_into_board(lcd_board, size, numbersAsBitMasks[digit]);
+    put_digit_into_board(lcd_board, size, numbersAsBitFlags[digit]);
 
     // tail recursion
     put_digits_into_board(lcd_board, number / 10, size);
