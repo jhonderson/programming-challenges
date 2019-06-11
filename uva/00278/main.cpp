@@ -22,7 +22,6 @@
  */
 
 #include <iostream>
-#include <math.h>
 
 /**
  * UVa 00278 - Chess
