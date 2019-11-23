@@ -3,16 +3,28 @@
 
 using namespace std;
 
-int MaxPairwiseProduct(const vector<int>& numbers) {
-    int product = 0;
+long long MaxPairwiseProduct(const vector<int>& numbers) {
+    long long product = 0;
     int n = numbers.size();
+    int firstMaxValueIndex = -1;
+    int secondMaxValueIndex = -1;
+    int maxValue = -1;
     for (int i = 0; i < n; ++i) {
-        for (int j = i + 1; j < n; ++j) {
-            product = max(product, numbers[i] * numbers[j]);
+        if (firstMaxValueIndex == -1 || numbers[i] > maxValue) {
+            firstMaxValueIndex = i;
+            maxValue = numbers [i];
         }
     }
-    return product;
+    maxValue = -1;
+    for (int i = 0; i < n; ++i) {
+        if (firstMaxValueIndex != i && (secondMaxValueIndex == -1 || numbers[i] > maxValue)) {
+            secondMaxValueIndex = i;
+            maxValue = numbers [i];
+        }
+    }
+    return ((long long) numbers[firstMaxValueIndex]) * numbers[secondMaxValueIndex];
 }
+
 int main() {
     int n;
     cin >> n;
@@ -20,7 +32,7 @@ int main() {
     for (int i = 0; i < n; ++i) {
         cin >> numbers[i];
     }
-    int product = MaxPairwiseProduct(numbers);
+    long long product = MaxPairwiseProduct(numbers);
     cout << product << "\n";
     return 0;
 }
