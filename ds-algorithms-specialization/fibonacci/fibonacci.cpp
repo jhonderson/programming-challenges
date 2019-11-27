@@ -25,13 +25,16 @@ int fibonacci_fast(int n) {
     if (n <= 1)
         return n;
 
-    int fib_numbers[n + 1];
-    fib_numbers[0] = 0;
-    fib_numbers[1] = 1;
-    for (int i = 2; i <= n; i++) {
-        fib_numbers[i] = fib_numbers[i - 1] + fib_numbers[i - 2];
+    int previous = 0;
+    int current  = 1;
+
+    for (int i = 0; i < n - 1; ++i) {
+        int tmp_previous = previous;
+        previous = current;
+        current = tmp_previous + current;
     }
-    return fib_numbers[n];
+
+    return current;
 }
 
 void test_solution() {
