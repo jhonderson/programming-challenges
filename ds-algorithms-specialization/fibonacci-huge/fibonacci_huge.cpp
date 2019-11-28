@@ -23,10 +23,8 @@ bool is_a_period(vector<long long> &numbers) {
     int size = numbers.size();
     int half_size = size / 2;
     bool is_a_period = size > 0 && size % 2 == 0;
-    int counter = 0;
     for (int i = 0; is_a_period && i < half_size; ++i) {
         is_a_period = numbers[i] == numbers[i + half_size];
-        counter++;
     }
     return is_a_period;
 }
