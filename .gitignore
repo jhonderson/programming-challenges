@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+microservices-wih-cqrs-and-event-sourcing/user-management/.idea/
+
+reactive-systems/akk-microservices-tutorial/0-shopping-cart-start-java/user-management/.idea/
